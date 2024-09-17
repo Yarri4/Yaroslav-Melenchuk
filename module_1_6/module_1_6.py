@@ -1,10 +1,13 @@
 my_dict  = {'Tom': 1997 , 'Sam': 1990}
 
-
-
 print('Цель 2):',my_dict)
-my_dict['Kris'] = 1979
+
+del my_dict['Sam']
 print('Цель 2):',my_dict['Tom'])
+print('Цель 2):',my_dict.get('Sam'))
+
+
+
 
 
 my_dict['Den']=1991
@@ -13,9 +16,22 @@ print('Цель 2):',my_dict)
 
 
 
+
+
+
+
+
+
+
+
+
+
 my_set = set = {1,2,3,4,5,1,2,3,4,5}
 my_set.add(6)
 my_set.add(7)
 print('Цель 3):',my_set)
 my_set.discard(7)
+
+
+
 print('Цель 3):',my_set)
