@@ -4,6 +4,10 @@
 grades = list_ = [[5, 3, 3, 5, 4], [2, 2, 2, 3], [4, 5, 5, 2], [4, 4, 3], [5, 5, 5, 4, 5]]
 students = set = {'Aaron', 'Bilbo', 'Johnny', 'Khendrik', 'Steve'}
 
+students_sort = sorted({'Aaron', 'Bilbo', 'Johnny', 'Khendrik', 'Steve'})
+
+
+
 dlina_a = len(grades[0])
 dlina_b = len(grades[1])
 dlina_j = len(grades[2])
@@ -27,14 +31,15 @@ Result_s = summa_s/dlina_s
 
 Result = {}
 
+
+
 Result.update (
-    { 'Aaron':Result_a,
-    'Bilbo':Result_b,
-    'Johnny':Result_j,
-    'Khendrik':Result_k,
-    'Steve':Result_s
+    { students_sort[0]:Result_a,
+    students_sort[1]:Result_b,
+    students_sort[2]:Result_j,
+    students_sort[3]:Result_k,
+    students_sort[4]:Result_s
     }
-    
 )
 
 print('Средний балл:', Result)
