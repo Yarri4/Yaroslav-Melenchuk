@@ -1,8 +1,6 @@
 
 # 2023/11/15 00:00|Домашнее задание по теме "Режимы открытия файлов"
 
-
-
 class Product:
     def __init__(self, name, weight, category):
         self.name = str(name)
