@@ -1,5 +1,6 @@
 # 2023/11/19 00:00|Домашнее задание по теме "Файлы в операционной системе".
 
+
 import os, time
 from os.path import join, getmtime, getsize, dirname
 directory = "."     # тестировать будем в папке проекта
