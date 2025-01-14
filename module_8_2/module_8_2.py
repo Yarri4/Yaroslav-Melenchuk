@@ -2,7 +2,7 @@
 
 def personal_sum(numbers):
     result = 0          # сумма чисел в коллекции numbers
-    incorrect_data = 0  # кол-во некорректных данных
+    incorrect_data = 0
     for number in numbers:
         try:
             result += number
