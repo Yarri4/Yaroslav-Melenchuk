@@ -8,35 +8,35 @@ def apply_all_func(int_list, *functions):
 
 int_list = [1, 4, 45.321, -555, 999.999, 112, 3]
 
-def min(int_list):  # - принимает список, возвращает минимальное значение из него.
+def min(int_list):
     i = 0
     for i in range(len(int_list)-1):
         if int_list[i] < int_list[i + 1]:
             result = int_list[i]
     return result
 
-def max(int_list):  # - принимает список, возвращает максимальное значение из него.
+def max(int_list):
     i = 0
     for i in range(len(int_list)-1):
         if int_list[i] > int_list[i + 1]:
             result = int_list[i]
     return result
 
-def len_(int_list):  # - принимает список, возвращает кол-во элементов в нём.
+def len_(int_list):
     result = len(int_list)
     return result
 
-def sum(int_list):  # - принимает список, возвращает сумму его элементов.
+def sum(int_list):
     result = 0
     for i in int_list:
         result += i
     return result
 
-def sorted_(int_list):  # - принимает список, возвращает новый отсортированный список на основе переданного.
+def sorted_(int_list):
     result = sorted(int_list)
     return result
 
-def midle(int_list):  # - принимает список, возвращает среднее значение его элементов.
+def midle(int_list):
     result = 0
     for i in int_list:
         result += i
