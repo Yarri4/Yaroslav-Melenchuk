@@ -32,9 +32,9 @@ class Bank:
                 self.lock.acquire()
             time.sleep(0.001)
 
-bank = Bank()
-deposit_thread = threading.Thread(target=bank.deposit)
-take_thread = threading.Thread(target=bank.take)
+bk = Bank()
+deposit_thread = threading.Thread(target=bk.deposit)
+take_thread = threading.Thread(target=bk.take)
 
 deposit_thread.start()
 take_thread.start()
@@ -42,4 +42,4 @@ take_thread.start()
 deposit_thread.join()
 take_thread.join()
 
-print(f"Итоговый баланс: {bank.balance}")
+print(f"Итоговый баланс: {bk.balance}")
