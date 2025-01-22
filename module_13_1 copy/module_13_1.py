@@ -4,26 +4,23 @@ import asyncio
 
 async def start_strongman(name, power):
     print(f'Силач {name} начал соревнования.')
-
-    tries = 5
-    inverse_power = 1 / power
-
-    for i in range(1, tries+1):
-        await asyncio.sleep(inverse_power)
-        print(f'Силач {name} поднял {i}')
+    
+    for i in range(1, 6):  # 5 шаров
+        await asyncio.sleep(1 / power)  # Задержка обратно пропорциональна силе
+        print(f'Силач {name} поднял {i} шар.')
 
     print(f'Силач {name} закончил соревнования.')
-    
-async def start_tournament():
 
-    tasks = (
+async def start_tournament():
+    # Создание задач для каждого силача
+    tasks = [
         asyncio.create_task(start_strongman('Pasha', 3)),
         asyncio.create_task(start_strongman('Denis', 4)),
         asyncio.create_task(start_strongman('Apollon', 5))
-    )
+    ]
+    
+    # Ожидание задач
+    await asyncio.gather(*tasks)
 
-    for i in tasks:
-        await i
-
-
+# Запуск функции
 asyncio.run(start_tournament())
