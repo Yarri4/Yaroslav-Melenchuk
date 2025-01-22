@@ -1,71 +1,109 @@
-# 2023/10/10 00:00|Самостоятельная работа по уроку "Произвольное число параметров".
+# 2023/11/05 00:00|Дополнительное практическое задание по модулю*
+# Дополнительное практическое задание по модулю: "Классы и объекты."
 
 
-same_words = []
-words = []
+import hashlib
+import time
 
-def single_root_words(root_word, *other_words):
-    same_words = []
-    words = []
-    word = str(root_word).lower()
-    other_words = str(*other_words)
-    l = 0
-    start = 0  # Начало строки
-    while l < len(other_words):
-        ltr = other_words[l]
-        if  ltr == ' ':
-            l = l + 1
-            nxt_word = other_words[start:l-1]
-            start = l
-            if len(nxt_word) == 0:  # пропускаем пробелы
-                continue
-            words.append(nxt_word)
-            if nxt_word.lower() in word:
-                print(f'{root_word} содержит слово {nxt_word}')
-                same_words.append(nxt_word)
-            elif word in nxt_word.lower():
-                same_words.append(nxt_word)
-        elif l == len(other_words)-1:   # проверим последнее слово
-            words.append(other_words[start:l+1])
-            if other_words[start:l+1].lower() in word:
-                print(f'{root_word} содержит слово {nxt_word}')
-                same_words.append(other_words[start:l+1])
-            elif other_words[start:l+1].lower().count(word):
-                same_words.append(other_words[start:l + 1])
-            break
-        else:
-            l = l + 1
-            continue
-    print('Проверяемые слова:', words)
+class User:
+    def __init__(self, nickname, password, age):
+        self.nickname = nickname
+        self.password = hashlib.sha256(password.encode()).hexdigest()  # Хэшируем пароль
+        self.age = age
 
-    l_other_words = ' ' + other_words.lower() + ' '
-    n = l_other_words.count(word)  # количество совпадений, счетчик
-#    s = l_other_words.count(' ')  # количество пробелов
-    print("Проверочное слово: ",root_word)
-    if n == 0:
-        print('Однокоренных слов не встретилось')
-    else:
-        s = l_other_words.count(' ')  # количество пробелов
-    return same_words
 
-# Проверка
-root_word = 'мЕч'
-other_words = 'Мечта зАмечательно еч вода МЕЧи ме   семечка'
-print(type(other_words))
+class Video:
+    def __init__(self, title, duration, adult_mode=False):
+        self.title = title
+        self.duration = duration
+        self.time_now = 0
+        self.adult_mode = adult_mode
 
-single_root_words(root_word, other_words)
-print('Однокоренные слова:\n', *same_words)
-print(' '+'~'*len(other_words))
 
-root_word = 'Доработка'
-other_words = 'Возможность ОТК бот клуб НЕДОРАБОТКА  раб'
-print(type(other_words))
+class UrTube:
+    def __init__(self):
+        self.users = []
+        self.videos = []
+        self.current_user = None
 
-single_root_words(root_word, other_words)
-print('Однокоренные слова:\n', *same_words)
-print(' '+'~'*len(other_words))
+    def log_in(self, nickname, password):
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        for user in self.users:
+            if user.nickname == nickname and user.password == hashed_password:
+                self.current_user = user
+                print(f'Пользователь {nickname} вошел в систему.')
+                return
+        print("Неверный логин или пароль.")
 
-print('Для самостоятельной проверки')
-root_word = str(input('Введите искомый корень: '))
-other_words = str(input('Введите строку с остальными словами: '))
-single_root_words(root_word, other_words)
+    def register(self, nickname, password, age):
+        for user in self.users:
+            if user.nickname == nickname:
+                print(f"Пользователь {nickname} уже существует.")
+                return
+        new_user = User(nickname, password, age)
+        self.users.append(new_user)
+        self.current_user = new_user
+        print(f'Пользователь {nickname} зарегистрирован и автоматически вошел в систему.')
+
+    def log_out(self):
+        self.current_user = None
+        print("Вы вышли из аккаунта.")
+
+    def add(self, *videos):
+        for video in videos:
+            if not any(v.title == video.title for v in self.videos):
+                self.videos.append(video)
+                print(f'Видео "{video.title}" добавлено.')
+            else:
+                print(f'Видео "{video.title}" уже существует.')
+
+    def get_videos(self, keyword):
+        return [video.title for video in self.videos if keyword.lower() in video.title.lower()]
+
+    def watch_video(self, title):
+        if self.current_user is None:
+            print("Войдите в аккаунт, чтобы смотреть видео")
+            return
+        
+        for video in self.videos:
+            if video.title == title:
+                if self.current_user.age < 18 and video.adult_mode:
+                    print("Вам нет 18 лет, пожалуйста покиньте страницу")
+                    return
+                
+                print(f'Начинаем просмотр видео "{title}".')
+                while video.time_now < video.duration:
+                    print(f'Секунда {video.time_now + 0.5}...')
+                    video.time_now += 1
+                    time.sleep(0.5)  # Пауза в 0.5 секунд
+                print("Конец видео")
+                video.time_now = 0  # Сброс времени просмотра
+                return
+        
+        print("Видео не найдено.")
+
+# Пример использования классов
+if __name__ == "__main__":
+    ur = UrTube()
+    
+    # Регистрация пользователей
+    ur.register("user1", "password123", 25)
+    ur.register("user2", "password456", 17)
+
+    # Добавление видео
+    video1 = Video("Urban the best", 10, adult_mode=True)
+    video2 = Video("Nature documentary", 5)
+    ur.add(video1, video2)
+
+    # Вход в систему
+    ur.log_in("user1", "password123")
+    
+    # Просмотр видео
+    ur.watch_video("Urban the best")
+    
+    # Попытка воспроизведения несуществующего видео
+    ur.watch_video('Лучший язык программирования 2024 года!')
+    
+    # Выход из системы
+    ur.log_out()
+    
