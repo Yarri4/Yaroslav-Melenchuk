@@ -1,43 +1,70 @@
 # 2023/11/09 00:00|Домашнее задание по теме "Множественное наследование"
 
-class Horse:            # класс описывающий лошадь.
-    x_distance = 0      # пройденный путь.
-    _sound = 'Frrr'     # звук, который издаёт лошадь.
+class Animal:
+    live = True
+    sound = None
+    _DEGREE_OF_DANGER = 0
 
-    def run(self, dx):  # dx - изменение дистанции, увеличивает x_distance на dx
-        self.x_distance += dx
+    def __init__(self, speed):
+        self._cords = [0, 0, 0]
+        self.speed = speed
 
-class Eagle:            # класс описывающий орла
-    y_distance = 0      # высота полёта
-    sound = 'I train, eat, sleep, and repeat' # звук, который издаёт орёл (отсылка)
+    def move(self, dx, dy, dz):
+        if self._cords[2] + dz * self.speed < 0:
+            print("It's too deep, I can't dive :(")
+        else:
+            self._cords[0] += dx * self.speed
+            self._cords[1] += dy * self.speed
+            self._cords[2] += dz * self.speed
 
-    def fly(self, dy):  # где dy - изменение дистанции, увеличивает y_distance на dy.
-        self.y_distance += dy
+    def get_cords(self):
+        return f"X: {self._cords[0]}, Y: {self._cords[1]}, Z: {self._cords[2]}"
 
-class Pegasus(Horse, Eagle):  # класс описывающий пегаса. Наследуется от Horse и Eagle в том же порядке.
-# Объект такого класса должен обладать атрибутами классов родителей в порядке наследования.
-# Также обладает методами:
+    def attack(self):
+        if self._DEGREE_OF_DANGER < 5:
+            return "Sorry, I'm peaceful :)"
+        else:
+            return f"Be careful, I'm attacking you 0_0"
 
-    def __init__(self):
-        self.sound = super()._sound
-        self.sound = super().sound
 
-    def move(self, dx, dy):   #- где dx и dy изменения дистанции.
-        self.run(dx)
-        self.fly(dy)
+class Bird(Animal):
+    beak = True
 
-    def get_pos(self):  # возвращает текущее положение пегаса в виде кортежа - (x_distance, y_distance) в том же порядке
-        pos_pegasus = (self.x_distance, self.y_distance)
-        return pos_pegasus
+    def lay_eggs(self):
+        return "Here are(is) eggs for you"
 
-    def voice(self):    # печатает значение унаследованного атрибута sound.
-        print(self.sound)
 
-pegasus1 = Pegasus()
-#print(Pegasus.mro())
-print(pegasus1.get_pos())
-pegasus1.move(12, 6)
-print(pegasus1.get_pos())
-pegasus1.move(-3, 6)
-print(pegasus1.get_pos())
-pegasus1.voice()
+class AquaticAnimal(Animal):
+    _DEGREE_OF_DANGER = 3
+
+    def dive_in(self, dz):
+        dz = abs(dz)  # берем модуль
+        if self._cords[2] - dz * (self.speed / 2) < 0:
+            print("It's too deep, I can't dive :(")
+        else:
+            self._cords[2] -= dz * (self.speed / 2)
+
+
+class PoisonousAnimal(Animal):
+    _DEGREE_OF_DANGER = 8
+
+
+class Duckbill(Bird, AquaticAnimal, PoisonousAnimal):
+    sound = "Click-click-click"
+
+    def __init__(self, speed):
+        super().__init__(speed)
+
+
+# Пример использования
+if __name__ == "__main__":
+    duckbill = Duckbill(10)
+    print(duckbill.get_cords())
+
+    duckbill.move(1, 1, -1)
+    print(duckbill.get_cords())
+
+    duckbill.move(1, 1, -10)  # Слишком глубокое погружение
+    print(duckbill.attack())  
+    duckbill.lay_eggs()
+
