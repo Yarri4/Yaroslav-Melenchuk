@@ -1,26 +1,57 @@
-# 2023/11/26 00:00|Домашнее задание по теме "Создание исключений"
+class IncorrectVinNumber(Exception):
+    def __init__(self, message):
+        self.message = message
 
-import time
-from multiprocessing import Pool
+class IncorrectCarNumbers(Exception):
+    def __init__(self, message):
+        self.message = message
 
-# Список названий файлов из архива к задаче
-file_names = ['file 1.txt', 'file 2.txt', 'file 3.txt','file 4.txt']
+class Car:
+    def __init__(self, model, vin_number, numbers):
+        self.model = model
+        self.__vin = self.__is_valid_vin(vin_number)
+        self.__numbers = self.__is_valid_numbers(numbers)
 
-# Функция для чтения данных из файла
-def read_info(name):
-    all_data = []
-    with open(name, 'r') as file:
-        while True:
-            line = file.readline() # Читаем файл
-            if not line:  # Выход из цикла
-                break
-            all_data.append(line.strip())  # Добавляем строку
+    def __is_valid_vin(self, vin_number):
+        if not isinstance(vin_number, int):
+            raise IncorrectVinNumber('Некорректный тип vin номер')
+        if not 1000000 <= vin_number <= 9999999:
+            raise IncorrectVinNumber('Неверный диапазон для vin номера')
+        return True
 
-if __name__ == '__main__':
-    start_time_parallel = time.time()
+    def __is_valid_numbers(self, numbers):
+        if not isinstance(numbers, str):
+            raise IncorrectCarNumbers('Некорректный тип данных для номеров')
+        if len(numbers) != 6:
+            raise IncorrectCarNumbers('Неверная длина номера')
+        return True
 
-    with Pool() as pool:
-        results = pool.map(read_info, file_names)
 
-    end_time_parallel = time.time()
-    print(f"Время выполнения многопроцессного подхода: {end_time_parallel - start_time_parallel:.2f} секунд")
+# Пример результата выполнения программы:
+
+try:
+    first = Car('Model1', 1000000, 'f123dj')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{first.model} успешно создан')
+
+try:
+    second = Car('Model2', 300, 'т001тр')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{second.model} успешно создан')
+
+try:
+    third = Car('Model3', 2020202, 'нет номера')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{third.model} успешно создан')

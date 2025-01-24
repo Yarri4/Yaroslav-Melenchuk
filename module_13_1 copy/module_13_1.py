@@ -24,3 +24,4 @@ async def start_tournament():
 
 # Запуск функции
 asyncio.run(start_tournament())
+
